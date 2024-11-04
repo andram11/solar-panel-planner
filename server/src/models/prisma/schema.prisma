@@ -1,0 +1,46 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Address_listing {
+  id                      Int            @id @default(autoincrement())
+  address_no              String         @db.VarChar(100)
+  street_prefix_direction String?         @db.VarChar(2)
+  street_prefix_type      String?         @db.VarChar(25)
+  street_name             String         @db.VarChar(50)
+  street_suffix_type      String?         @db.VarChar(10)
+  street_suffix_direction String?         @db.VarChar(5)
+  street_extension        String?         @db.VarChar(5)
+  full_address            String         @db.VarChar(255)
+  city                    String         @db.VarChar(50)
+  zip                     Int
+  appointments            Appointments[]
+}
+
+model Street_Suffix_Ref {
+  id                 Int    @id @default(autoincrement())
+  street_prefix_type String @db.VarChar(10)
+}
+
+model Appointments {
+  id             Int             @id @default(autoincrement())
+  fk_address     Int
+  address        Address_listing @relation(fields: [fk_address], references: [id])
+  fName          String          @db.VarChar(50)
+  lName          String          @db.VarChar(50)
+  phoneNumber    String          @db.VarChar(50)
+  requested_date String          @db.VarChar(10) //DD-MM-YYYY
+  pref_timeslot  Int?
+  status         Status
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  comments       String?         @db.VarChar(255)
+}
+
+enum Status {
+  CREATED
+  ASSIGNED
+  DONE
+  CANCELLED
+}
