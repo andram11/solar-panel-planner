@@ -3,6 +3,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider= "prisma-client-js"
+}
+
 model Address_listing {
   id                      Int            @id @default(autoincrement())
   address_no              String         @db.VarChar(100)
@@ -37,6 +41,13 @@ model Appointments {
   updatedAt      DateTime        @updatedAt
   comments       String?         @db.VarChar(255)
 }
+
+model ApplicationLog {
+    id        Int      @id @default(autoincrement())
+    level     String   @db.VarChar(50)
+    message   String
+    timestamp DateTime @default(now())
+  }
 
 enum Status {
   CREATED
