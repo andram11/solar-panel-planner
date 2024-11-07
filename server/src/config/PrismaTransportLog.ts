@@ -19,10 +19,12 @@ export class PrismaTransport extends TransportStream {
     const { level, message, timestamp } = info;
 
     try {
+        const formattedMessage = typeof message === 'string' ? message : JSON.stringify(message);
+
       await this.prisma.applicationLog.create({
         data: {
           level,
-          message,
+          message: formattedMessage,
           timestamp: timestamp || new Date(),
         },
       });
