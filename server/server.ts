@@ -4,16 +4,21 @@ import logger from './src/utils/logger';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
+//Routes
+import addressSearchRouter from './src/routes/addressSearch.router';
+
+
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT;
 
+
 app.use(cors());
 app.use(express.json());
 
 //Logging requests middleware - Before routes
-app.use((req,res, next)=> {
+app.use((req: Request,res: Response, next)=> {
     logger.info({
         body: req.body,
         params: req.params,
@@ -21,6 +26,9 @@ app.use((req,res, next)=> {
     })
     next()
 })
+
+//Routes
+app.use(addressSearchRouter)
 
 //Error middleware - After all routes
 app.use(errorMiddleware)
