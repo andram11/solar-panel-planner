@@ -3,7 +3,6 @@ import {prisma} from '../utils/dbClient'
 export const searchAddresses = async(suffixType?: string, streetName?: string, zipCode?: string)=>{
     //If all search parameters are provided we apply the AND operator
     const conditions: any= {}
-    console.log(conditions)
     if (suffixType) conditions.street_suffix_type= {equals: suffixType, mode:'insensitive'}
     if (streetName) conditions.street_name= {contains: streetName, mode:'insensitive'}
     if(zipCode) conditions.zip= Number(zipCode)
