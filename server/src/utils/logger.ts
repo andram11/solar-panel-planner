@@ -1,14 +1,13 @@
+import winston from "winston";
+import { PrismaClient } from "@prisma/client";
 
-import winston from 'winston';
-import { PrismaClient } from '@prisma/client';
+import { PrismaTransport } from "../config/PrismaTransportLog";
 
-import { PrismaTransport} from '../config/PrismaTransportLog';
-
-const prisma= new PrismaClient()
+const prisma = new PrismaClient();
 
 const logger = winston.createLogger({
-    //will capture level info and above
-  level: 'info',
+  //will capture level info and above
+  level: "info",
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.json()
@@ -18,8 +17,8 @@ const logger = winston.createLogger({
     new winston.transports.Console(),
     //record everything in db
     new PrismaTransport({
-        prisma,
-    })
+      prisma,
+    }),
   ],
 });
 

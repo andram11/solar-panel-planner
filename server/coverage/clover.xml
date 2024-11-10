@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1731048571601" clover="3.2.0">
-  <project timestamp="1731048571601" name="All files">
-    <metrics statements="68" coveredstatements="67" conditionals="20" coveredconditionals="17" methods="10" coveredmethods="10" elements="98" coveredelements="94" complexity="0" loc="68" ncloc="68" packages="7" files="8" classes="8"/>
+<coverage generated="1731264097924" clover="3.2.0">
+  <project timestamp="1731264097924" name="All files">
+    <metrics statements="96" coveredstatements="94" conditionals="24" coveredconditionals="20" methods="15" coveredmethods="15" elements="135" coveredelements="129" complexity="0" loc="96" ncloc="96" packages="7" files="10" classes="10"/>
     <package name="server">
-      <metrics statements="19" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+      <metrics statements="21" coveredstatements="21" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
       <file name="server.ts" path="C:\Users\merti\Documents\WebDev\Portfolio\solar-panel-planner\server\server.ts">
-        <metrics statements="19" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <metrics statements="21" coveredstatements="21" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
         <line num="13" count="1" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
         <line num="17" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
-        <line num="21" count="1" type="stmt"/>
-        <line num="22" count="2" type="stmt"/>
-        <line num="27" count="2" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="4" type="stmt"/>
+        <line num="26" count="4" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
         <line num="31" count="1" type="stmt"/>
         <line num="34" count="1" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
@@ -32,47 +34,69 @@
       <file name="PrismaTransportLog.ts" path="C:\Users\merti\Documents\WebDev\Portfolio\solar-panel-planner\server\src\config\PrismaTransportLog.ts">
         <metrics statements="10" coveredstatements="9" conditionals="4" coveredconditionals="3" methods="2" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
-        <line num="9" count="1" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
-        <line num="19" count="3" type="stmt"/>
-        <line num="21" count="3" type="stmt"/>
-        <line num="22" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="24" count="3" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="35" count="3" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="20" count="5" type="stmt"/>
+        <line num="22" count="5" type="stmt"/>
+        <line num="24" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="26" count="5" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="37" count="5" type="stmt"/>
       </file>
     </package>
     <package name="server.src.controllers">
-      <metrics statements="10" coveredstatements="10" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+      <metrics statements="22" coveredstatements="22" conditionals="7" coveredconditionals="7" methods="4" coveredmethods="4"/>
+      <file name="addressReference.controller.ts" path="C:\Users\merti\Documents\WebDev\Portfolio\solar-panel-planner\server\src\controllers\addressReference.controller.ts">
+        <metrics statements="11" coveredstatements="11" conditionals="3" coveredconditionals="3" methods="2" coveredmethods="2"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="13" count="2" type="cond" truecount="3" falsecount="0"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+      </file>
       <file name="addressSearch.controller.ts" path="C:\Users\merti\Documents\WebDev\Portfolio\solar-panel-planner\server\src\controllers\addressSearch.controller.ts">
-        <metrics statements="10" coveredstatements="10" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+        <metrics statements="11" coveredstatements="11" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
         <line num="2" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
-        <line num="6" count="2" type="stmt"/>
-        <line num="7" count="2" type="stmt"/>
-        <line num="8" count="2" type="stmt"/>
-        <line num="10" count="2" type="cond" truecount="4" falsecount="0"/>
-        <line num="11" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="14" count="2" type="cond" truecount="4" falsecount="0"/>
         <line num="15" count="1" type="stmt"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
       </file>
     </package>
     <package name="server.src.middleware">
       <metrics statements="6" coveredstatements="6" conditionals="6" coveredconditionals="4" methods="1" coveredmethods="1"/>
       <file name="errorMiddleware.ts" path="C:\Users\merti\Documents\WebDev\Portfolio\solar-panel-planner\server\src\middleware\errorMiddleware.ts">
         <metrics statements="6" coveredstatements="6" conditionals="6" coveredconditionals="4" methods="1" coveredmethods="1"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="12" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="13" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="11" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="12" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
       </file>
     </package>
     <package name="server.src.routes">
-      <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="addressReference.router.ts" path="C:\Users\merti\Documents\WebDev\Portfolio\solar-panel-planner\server\src\routes\addressReference.router.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+      </file>
       <file name="addressSearch.router.ts" path="C:\Users\merti\Documents\WebDev\Portfolio\solar-panel-planner\server\src\routes\addressSearch.router.ts">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -82,37 +106,47 @@
       </file>
     </package>
     <package name="server.src.services">
-      <metrics statements="9" coveredstatements="9" conditionals="6" coveredconditionals="6" methods="2" coveredmethods="2"/>
+      <metrics statements="19" coveredstatements="18" conditionals="7" coveredconditionals="6" methods="5" coveredmethods="5"/>
       <file name="addressService.ts" path="C:\Users\merti\Documents\WebDev\Portfolio\solar-panel-planner\server\src\services\addressService.ts">
-        <metrics statements="9" coveredstatements="9" conditionals="6" coveredconditionals="6" methods="2" coveredmethods="2"/>
+        <metrics statements="19" coveredstatements="18" conditionals="7" coveredconditionals="6" methods="5" coveredmethods="5"/>
         <line num="1" count="2" type="stmt"/>
-        <line num="3" count="5" type="stmt"/>
-        <line num="5" count="5" type="stmt"/>
-        <line num="6" count="5" type="cond" truecount="1" falsecount="0"/>
-        <line num="7" count="5" type="cond" truecount="1" falsecount="0"/>
-        <line num="8" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="7" count="5" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
         <line num="10" count="5" type="cond" truecount="1" falsecount="0"/>
         <line num="11" count="1" type="stmt"/>
-        <line num="14" count="4" type="stmt"/>
+        <line num="12" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="14" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="16" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="20" count="4" type="stmt"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="45" count="9" type="stmt"/>
+        <line num="48" count="9" type="stmt"/>
+        <line num="49" count="9" type="cond" truecount="0" falsecount="1"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="54" count="9" type="stmt"/>
+        <line num="58" count="5683" type="stmt"/>
       </file>
     </package>
     <package name="server.src.utils">
       <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="AppError.ts" path="C:\Users\merti\Documents\WebDev\Portfolio\solar-panel-planner\server\src\utils\AppError.ts">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="2" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
       </file>
       <file name="logger.ts" path="C:\Users\merti\Documents\WebDev\Portfolio\solar-panel-planner\server\src\utils\logger.ts">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="9" count="1" type="stmt"/>
-        <line num="26" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
       </file>
     </package>
   </project>

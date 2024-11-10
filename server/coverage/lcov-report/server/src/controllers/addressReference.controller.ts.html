@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for server/src/middleware/errorMiddleware.ts</title>
+    <title>Code coverage report for server/src/controllers/addressReference.controller.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">server/src/middleware</a> errorMiddleware.ts</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">server/src/controllers</a> addressReference.controller.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -87,53 +87,56 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Request, Response, NextFunction } from "express";
+import { getAddressReference } from "../services/addressService";
 import { AppError } from "../utils/AppError";
 &nbsp;
-export const errorMiddleware = (
-  err: Error | AppError,
+export const httpGetAddressReference = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) =&gt; {
-  // If the error is an instance of AppError, then it will have a statusCode
-  const statusCode = err instanceof AppError ? err.statusCode : <span class="branch-1 cbranch-no" title="branch not covered" >500;</span>
-  const message = err.message || <span class="branch-1 cbranch-no" title="branch not covered" >"An unexpected error occurred";</span>
+  try {
+    //Check the query parameter is present and of proper type
+    const { referenceType } = req.query;
+    if (typeof referenceType !== "string" || referenceType.trim() === "") {
+      throw new AppError(
+        "Expected search parameter 'referenceType' is missing or invalid.",
+        400
+      );
+    }
 &nbsp;
-  // Log the error stack trace
-  console.error(err);
-&nbsp;
-  // Return generic error message
-  res.status(statusCode).json({
-    status: "error",
-    message: message,
-    // Optional: include the stack trace in non-production environments
-    ...(process.env.NODE_ENV !== "production" &amp;&amp; { stack: err.stack }),
-  });
+    const references = await getAddressReference(referenceType);
+    res.status(200).json({ data: references });
+  } catch (err) {
+    next(err);
+  }
 };
 &nbsp;</pre></td></tr></table></pre>
 
