@@ -1,8 +1,9 @@
-import TransportStream from 'winston-transport';
+import TransportStream from "winston-transport";
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
-interface PrismaTransportOptions extends TransportStream.TransportStreamOptions {
+interface PrismaTransportOptions
+  extends TransportStream.TransportStreamOptions {
   prisma: PrismaClient;
 }
 
@@ -19,7 +20,8 @@ export class PrismaTransport extends TransportStream {
     const { level, message, timestamp } = info;
 
     try {
-        const formattedMessage = typeof message === 'string' ? message : JSON.stringify(message);
+      const formattedMessage =
+        typeof message === "string" ? message : JSON.stringify(message);
 
       await this.prisma.applicationLog.create({
         data: {
@@ -29,7 +31,7 @@ export class PrismaTransport extends TransportStream {
         },
       });
     } catch (error) {
-      console.error('Failed to log to database:', error);
+      console.error("Failed to log to database:", error);
     }
 
     callback(); // Required for winston to finish the log
