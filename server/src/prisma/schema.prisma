@@ -22,10 +22,6 @@ model Address_listing {
   appointments            Appointments[]
 }
 
-model Street_Suffix_Ref {
-  id                 Int    @id @default(autoincrement())
-  street_prefix_type String @db.VarChar(10)
-}
 
 model Appointments {
   id             Int             @id @default(autoincrement())
@@ -35,11 +31,19 @@ model Appointments {
   lName          String          @db.VarChar(50)
   phoneNumber    String          @db.VarChar(50)
   requested_date String          @db.VarChar(10) //DD-MM-YYYY
-  pref_timeslot  Int?
+  pref_timeslot  String?
+  actual_timeslot  String?
   status         Status
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   comments       String?         @db.VarChar(255)
+}
+
+model Daily_Appointments_Counter {
+  id             Int             @id @default(autoincrement())
+  date           String          @db.VarChar(10) @unique//DD-MM-YYYY
+  counter        Int    
+  updatedAt      DateTime        @updatedAt         
 }
 
 model ApplicationLog {

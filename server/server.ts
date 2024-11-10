@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 //Routes
 import addressSearchRouter from "./src/routes/addressSearch.router";
 import addressReferenceRouter from "./src/routes/addressReference.router";
+import appointmentRouter from "./src/routes/appointment.router";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use((req: Request, res: Response, next) => {
 //Routes
 app.use(addressSearchRouter);
 app.use(addressReferenceRouter);
+app.use(appointmentRouter);
 
 //Error middleware - After all routes
 app.use(errorMiddleware);
