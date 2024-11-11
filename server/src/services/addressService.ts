@@ -47,7 +47,7 @@ export const getAddressReference = async (referenceType: string) => {
   // Map the referenceType to the actual column name
   const columnName: string = columnMap[referenceType];
   if (!columnName) {
-    throw new Error("Invalid reference type");
+    throw new Error("Invalid reference type.");
   }
 
   // Use raw SQL to select distinct values

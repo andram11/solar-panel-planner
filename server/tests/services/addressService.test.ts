@@ -2,7 +2,11 @@ import {
   searchAddresses,
   getAddressReference,
 } from "../../src/services/addressService";
+import { createAppointment } from "../../src/services/appointmentService";
+import { Appointment } from "../../src/interfaces/appointment";
 import { prisma } from "../../src/utils/dbClient";
+import { formatDate } from "../../src/utils/formatDates";
+import { AppointmentStatus } from "../../src/interfaces/appointmentStatus";
 
 describe("searchAddresses integration test", () => {
   afterAll(async () => {
@@ -13,13 +17,13 @@ describe("searchAddresses integration test", () => {
     const results = await searchAddresses(undefined, "FLORIDA", undefined);
     expect(results).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          id: 211,
+        {
+          id: 81,
           street_name: "FLORIDA",
-          street_suffix_type: "BLVD",
-          full_address: "9244 FLORIDA BLVD, STE E",
-          zip: 70815,
-        }),
+          street_suffix_type: "ST",
+          full_address: "2928 FLORIDA ST",
+          zip: 70806,
+        },
       ])
     );
   });
@@ -34,13 +38,13 @@ describe("searchAddresses integration test", () => {
     const results = await searchAddresses(undefined, undefined, "70815");
     expect(results).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          id: 211,
+        {
+          id: 207,
           street_name: "FLORIDA",
           street_suffix_type: "BLVD",
           full_address: "9244 FLORIDA BLVD, STE E",
           zip: 70815,
-        }),
+        },
       ])
     );
   });
@@ -49,13 +53,13 @@ describe("searchAddresses integration test", () => {
     const results = await searchAddresses("blvd", undefined, undefined);
     expect(results).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          id: 211,
-          street_name: "FLORIDA",
+        {
+          id: 3,
+          street_name: "SHERWOOD FOREST",
           street_suffix_type: "BLVD",
-          full_address: "9244 FLORIDA BLVD, STE E",
-          zip: 70815,
-        }),
+          full_address: "5830 S SHERWOOD FOREST BLVD, STE A6",
+          zip: 70816,
+        },
       ])
     );
   });
@@ -104,5 +108,11 @@ describe("getAddressReference integration test", () => {
   it("should return results when searching by zipCode", async () => {
     const results = await getAddressReference("zipCode");
     expect(results).toEqual(expect.arrayContaining([70714, 70722]));
+  });
+
+  it("should throw an error if invalid reference type is provided", async () => {
+    await expect(getAddressReference("zipCode22")).rejects.toThrow(
+      "Invalid reference type."
+    );
   });
 });
