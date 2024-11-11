@@ -3,4 +3,5 @@ export enum AppointmentStatus {
   ASSIGNED = "ASSIGNED",
   DONE = "DONE",
   CANCELLED = "CANCELLED",
+  ERROR = "ERROR",
 }

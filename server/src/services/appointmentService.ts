@@ -1,6 +1,13 @@
 import { Appointment } from "../interfaces/appointment";
 import { prisma } from "../utils/dbClient";
 import { AppError } from "../utils/AppError";
+import { sanitizeText, validateZip } from "../utils/sanitizeInput";
+import { formatDate } from "../utils/formatDates";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const similarityThreshold = process.env.SIMILARITY_THRESHOLD;
 
 export const createAppointment = async (appointment: Appointment) => {
   return await prisma.$transaction(async (tx: any) => {
@@ -9,20 +16,57 @@ export const createAppointment = async (appointment: Appointment) => {
       where: { date: appointment.appointmentDate },
     });
 
-    if (appointmentCounter && appointmentCounter.count >= 9) {
+    if (appointmentCounter && appointmentCounter.counter >= 9) {
       throw new AppError(
         "Maximum number of appointments reached for this date. Please select a different date.",
         400
       );
     }
 
-    // Step 2: Create the appointment
+    //Step 2: Check that the address exists in Address_Listing table and get the FK
+    const { fullAddress, city, zip } = appointment.address;
+
+    //Sanitize input since queryRawUnsafe bypasses the usual queryRaw protection against sql injection
+    const sanitizedFullAddress = sanitizeText(fullAddress, "fullAddress");
+    const sanitizedCity = sanitizeText(city, "city");
+    const validatedZip = validateZip(zip);
+
+    const query = `
+      SELECT id, full_address, city, zip
+      FROM planner."Address_listing"
+      WHERE 
+      city ILIKE CAST('${sanitizedCity}' AS TEXT)
+        AND zip = ${validatedZip}
+        AND public.similarity(CAST(full_address AS TEXT), CAST('${sanitizedFullAddress}' AS TEXT)) >= ${similarityThreshold}
+      ORDER BY public.similarity(CAST(full_address AS TEXT), CAST('${sanitizedFullAddress}' AS TEXT)) DESC
+    `;
+
+    const matchedAddresses = await tx.$queryRawUnsafe(query);
+
+    if (matchedAddresses.length === 0) {
+      throw new AppError(
+        "The provided address does not exist in our records.",
+        404
+      );
+    }
+
+    const fk_address = matchedAddresses[0].id;
+
+    // Step 3: Create the appointment
+    //check that appointmentDate is not in the past
+    if (appointment.appointmentDate < formatDate(new Date())) {
+      throw new AppError(
+        "The provided appointment date cannot be in the past.",
+        404
+      );
+    }
     const createdAppointment = await tx.appointments.create({
       data: {
         fName: appointment.fName,
         lName: appointment.lName,
         email: appointment.email,
         phoneNumber: appointment.phoneNumber,
+        fk_address: fk_address,
         requested_date: appointment.appointmentDate,
         pref_timeslot: appointment.preferredTimeslot,
         status: appointment.status,
@@ -30,17 +74,17 @@ export const createAppointment = async (appointment: Appointment) => {
       },
     });
 
-    // Step 3: Update the appointment counter
+    // Step 4: Update the appointment counter
     if (appointmentCounter) {
       // Increment the existing counter
-      await tx.dailyAppointmentsCounter.update({
+      await tx.daily_Appointments_Counter.update({
         where: { date: appointment.appointmentDate },
-        data: { count: { increment: 1 } },
+        data: { counter: { increment: 1 } },
       });
     } else {
       // Initialize the counter if it doesn't exist for this date
-      await tx.appointmentCounter.create({
-        data: { date: appointment.appointmentDate, count: 1 },
+      await tx.daily_Appointments_Counter.create({
+        data: { date: appointment.appointmentDate, counter: 1 },
       });
     }
 

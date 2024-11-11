@@ -29,6 +29,7 @@ model Appointments {
   address        Address_listing @relation(fields: [fk_address], references: [id])
   fName          String          @db.VarChar(50)
   lName          String          @db.VarChar(50)
+  email          String          @db.VarChar(100)
   phoneNumber    String          @db.VarChar(50)
   requested_date String          @db.VarChar(10) //DD-MM-YYYY
   pref_timeslot  String?

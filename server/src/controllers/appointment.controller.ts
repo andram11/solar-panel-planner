@@ -9,9 +9,17 @@ export const httpCreateAppointment = async (
   next: NextFunction
 ) => {
   try {
-    const { fName, lName, email, phoneNumber, appointmentDate } = req.body;
+    const { fName, lName, email, phoneNumber, appointmentDate, address } =
+      req.body;
     //Check requested search parameters are provided
-    if (!fName || !lName || !email || !phoneNumber || !appointmentDate) {
+    if (
+      !fName ||
+      !lName ||
+      !email ||
+      !phoneNumber ||
+      !appointmentDate ||
+      !address
+    ) {
       throw new AppError("Missing required properties.", 400);
     }
 
