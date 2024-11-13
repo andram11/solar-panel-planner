@@ -1,4 +1,7 @@
 import { prisma } from "../utils/dbClient";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const searchAddresses = async (
   suffixType?: string,
@@ -27,7 +30,7 @@ export const searchAddresses = async (
       full_address: true,
       zip: true,
     },
-    take: 50, //TO DO: check if pagination is needed
+    take: Number(process.env.PAGE_SIZE_ADDRESS), //TO DO: check if pagination is needed
   });
 };
 
@@ -43,7 +46,6 @@ const columnMap: Record<string, string> = {
 };
 
 export const getAddressReference = async (referenceType: string) => {
-
   // Map the referenceType to the actual column name
   const columnName: string = columnMap[referenceType];
   if (!columnName) {
@@ -57,8 +59,6 @@ export const getAddressReference = async (referenceType: string) => {
 
   return results.map((results) => results[columnName]);
 };
-
-
 
 //Search by streetname with phonetic similarity (using $queryRaw)
 /* const searchAddressesByStreetName= async(streetname: string)=> {

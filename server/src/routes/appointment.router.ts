@@ -1,6 +1,9 @@
 import express from "express";
-import { httpCreateAppointment } from "../controllers/appointment.controller";
+import { httpCreateAppointment, httpSearchAppointments } from "../controllers/appointment.controller";
 
 const appointmentRouter = express.Router();
 
-export default appointmentRouter.post("/appointment", httpCreateAppointment);
+appointmentRouter.post("/appointment", httpCreateAppointment);
+appointmentRouter.get("/appointment/search", httpSearchAppointments)
+
+export default appointmentRouter

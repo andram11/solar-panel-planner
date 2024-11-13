@@ -1,13 +1,20 @@
+//Interfaces
 import { Appointment } from "../interfaces/appointment";
+import { AppointmentPreview } from "../interfaces/appointmentPreview";
+import { AppointmentSearchRequest } from "../interfaces/appointmentSearchRequest";
+//Other imports
 import { prisma } from "../utils/dbClient";
 import { AppError } from "../utils/AppError";
 import { sanitizeText, validateZip } from "../utils/sanitizeInput";
 import { formatDate } from "../utils/formatDates";
 import dotenv from "dotenv";
+import { AppointmentStatus } from "../interfaces/appointmentStatus";
 
 dotenv.config();
 
 const similarityThreshold = process.env.SIMILARITY_THRESHOLD;
+const defaultPageSizeAppointments =
+  Number(process.env.PAGE_SIZE_APPOINTMENTS) || 10;
 
 export const createAppointment = async (appointment: Appointment) => {
   return await prisma.$transaction(async (tx: any) => {
@@ -90,4 +97,50 @@ export const createAppointment = async (appointment: Appointment) => {
 
     return createdAppointment;
   });
+};
+
+export const searchAppointments = async (
+  date?: string,
+  status?: AppointmentStatus,
+  zipCode?: string,
+  pageNumber?: number,
+  pageSize?: number
+) => {
+  //All search parameters can be applied at once or at least one must be available
+  const conditions: any = {};
+  if (date) conditions.requested_date = { equals: date };
+  if (status) conditions.status = { equals: status };
+  if (zipCode) conditions.zip = { equals: zipCode };
+
+  if (Object.keys(conditions).length === 0) {
+    throw new Error("At least one search parameter must be provided.");
+  }
+
+  //Get the count of items for pagination
+  const totalItems = await prisma.appointments.count({
+    where: conditions,
+  });
+
+  //Get the items
+  const items = await prisma.appointments.findMany({
+    skip: (Number(pageNumber) - 1 || 0) * Number(pageSize) || 0,
+    take: pageSize || defaultPageSizeAppointments,
+    where: conditions,
+    select: {
+      id: true,
+      email: true,
+      phoneNumber: true,
+      requested_date: true,
+      status: true,
+      address: {
+        select: {
+          full_address: true,
+          city: true,
+          zip: true,
+        },
+      },
+    },
+  });
+
+  return { totalItems, items };
 };
