@@ -1,29 +1,22 @@
+//Interfaces
 import { Appointment } from "../interfaces/appointment";
+//Other imports
 import { prisma } from "../utils/dbClient";
 import { AppError } from "../utils/AppError";
 import { sanitizeText, validateZip } from "../utils/sanitizeInput";
 import { formatDate } from "../utils/formatDates";
 import dotenv from "dotenv";
+import { AppointmentStatus } from "../interfaces/appointmentStatus";
 
 dotenv.config();
 
 const similarityThreshold = process.env.SIMILARITY_THRESHOLD;
+const defaultPageSizeAppointments =
+  Number(process.env.PAGE_SIZE_APPOINTMENTS) || 10;
 
 export const createAppointment = async (appointment: Appointment) => {
   return await prisma.$transaction(async (tx: any) => {
-    // Step 1: Check the current count of appointments for the given date
-    const appointmentCounter = await tx.daily_Appointments_Counter.findUnique({
-      where: { date: appointment.appointmentDate },
-    });
-
-    if (appointmentCounter && appointmentCounter.counter >= 9) {
-      throw new AppError(
-        "Maximum number of appointments reached for this date. Please select a different date.",
-        400
-      );
-    }
-
-    //Step 2: Check that the address exists in Address_Listing table and get the FK
+    //Step 1: Check that the address exists in Address_Listing table and get the FK
     const { fullAddress, city, zip } = appointment.address;
 
     //Sanitize input since queryRawUnsafe bypasses the usual queryRaw protection against sql injection
@@ -51,6 +44,18 @@ export const createAppointment = async (appointment: Appointment) => {
     }
 
     const fk_address = matchedAddresses[0].id;
+
+    // Step 2: Check the current count of appointments for the given date
+    const appointmentCounter = await tx.daily_Appointments_Counter.findUnique({
+      where: { date: appointment.appointmentDate },
+    });
+
+    if (appointmentCounter && appointmentCounter.counter >= 9) {
+      throw new AppError(
+        "Maximum number of appointments reached for this date. Please select a different date.",
+        400
+      );
+    }
 
     // Step 3: Create the appointment
     //check that appointmentDate is not in the past
@@ -90,4 +95,50 @@ export const createAppointment = async (appointment: Appointment) => {
 
     return createdAppointment;
   });
+};
+
+export const searchAppointments = async (
+  date?: string,
+  status?: AppointmentStatus,
+  zipCode?: string,
+  pageNumber?: number,
+  pageSize?: number
+) => {
+  //All search parameters can be applied at once or at least one must be available
+  const conditions: any = {};
+  if (date) conditions.requested_date = { equals: date };
+  if (status) conditions.status = { equals: status };
+  if (zipCode) conditions.address = { zip: Number(zipCode) };
+
+  if (Object.keys(conditions).length === 0) {
+    throw new Error("At least one search parameter must be provided.");
+  }
+
+  //Get the count of items for pagination
+  const totalItems = await prisma.appointments.count({
+    where: conditions,
+  });
+
+  //Get the items
+  const data = await prisma.appointments.findMany({
+    skip: (Number(pageNumber) - 1 || 0) * Number(pageSize) || 0,
+    take: pageSize || defaultPageSizeAppointments,
+    where: conditions,
+    select: {
+      id: true,
+      email: true,
+      phoneNumber: true,
+      requested_date: true,
+      status: true,
+      address: {
+        select: {
+          full_address: true,
+          city: true,
+          zip: true,
+        },
+      },
+    },
+  });
+
+  return { totalItems, data };
 };
