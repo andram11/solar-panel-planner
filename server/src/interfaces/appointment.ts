@@ -6,6 +6,7 @@ export interface CreateAppoitmentRequest extends Request {
 }
 
 export interface Appointment {
+  readonly id?: Number;
   fName: string; // First name of the person
   lName: string; // Last name of the person
   email: string; // Email address

@@ -142,3 +142,15 @@ export const searchAppointments = async (
 
   return { totalItems, data };
 };
+
+export const getAppointmentById = async (id: number) => {
+  const appointment = await prisma.appointments.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  if (!appointment) {
+    throw new Error("Appointment with the specified ID was not found.");
+  }
+  return appointment;
+};

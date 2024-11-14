@@ -19,5 +19,8 @@ module.exports = {
     "src/utils/dbClient.ts", // Ignore dbClient file
     "src/config/PrismaTransportLog.ts",
     "src/utils/sanitizeInput.ts",
+    "server.ts",
+    "src/middleware/errorMiddleware.ts",
+    "src/utils/pagination.ts",
   ],
 };

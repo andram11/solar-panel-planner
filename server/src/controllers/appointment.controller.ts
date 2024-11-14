@@ -1,10 +1,11 @@
-import { Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import { AppError } from "../utils/AppError";
 import { createPaginationResponse } from "../utils/pagination";
 
 //Service imports
 import {
   createAppointment,
+  getAppointmentById,
   searchAppointments,
 } from "../services/appointmentService";
 
@@ -84,6 +85,21 @@ export const httpSearchAppointments = async (
           appointments
         )
       );
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const httpGetAppointmentById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+
+    const appointment = await getAppointmentById(Number(id));
+    res.status(200).json({ data: appointment });
   } catch (err) {
     next(err);
   }
