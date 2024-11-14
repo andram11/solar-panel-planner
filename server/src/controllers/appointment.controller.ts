@@ -64,7 +64,7 @@ export const httpSearchAppointments = async (
       ] || null;
 
     //Call appointment service with the provided parameters
-    const { totalItems, items: appointments } = await searchAppointments(
+    const { totalItems, data: appointments } = await searchAppointments(
       date,
       statusEnum,
       zipCode,
@@ -73,14 +73,14 @@ export const httpSearchAppointments = async (
     );
 
     //Add pagination details
-    //TO DO
+
     res
       .status(200)
       .json(
         createPaginationResponse(
           totalItems,
           Number(pageNumber) || 1,
-          Number(pageSize || Number(process.env.PAGE_SIZE_APPOINTMENTS)),
+          Number(pageSize) || Number(process.env.PAGE_SIZE_APPOINTMENTS),
           appointments
         )
       );

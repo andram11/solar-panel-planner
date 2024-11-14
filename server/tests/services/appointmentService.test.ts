@@ -2,7 +2,10 @@ import { prisma } from "../../src/utils/dbClient";
 import { Appointment } from "../../src/interfaces/appointment";
 import { AppointmentStatus } from "../../src/interfaces/appointmentStatus";
 import { formatDate } from "../../src/utils/formatDates";
-import { createAppointment } from "../../src/services/appointmentService";
+import {
+  createAppointment,
+  searchAppointments,
+} from "../../src/services/appointmentService";
 
 describe("createAppointment integration test", () => {
   afterAll(async () => {
@@ -96,6 +99,96 @@ describe("createAppointment integration test", () => {
 
     await expect(createAppointment(appointmentData)).rejects.toThrow(
       "The provided appointment date cannot be in the past."
+    );
+  });
+});
+
+describe("searchAppointments integration test", () => {
+  afterAll(async () => {
+    await prisma.$disconnect();
+  });
+
+  it("should return results when searching by status", async () => {
+    const results = await searchAppointments(
+      undefined,
+      AppointmentStatus.CREATED,
+      undefined,
+      undefined,
+      undefined
+    );
+    expect(results.data).toEqual(
+      expect.arrayContaining([
+        {
+          id: 8,
+          email: "john.doe@example.com",
+          phoneNumber: "123-456-7890",
+          requested_date: "10-11-2024",
+          status: "CREATED",
+          address: {
+            full_address: "9007 HIGHLAND RD, STE 9",
+            city: "BATON ROUGE",
+            zip: 70810,
+          },
+        },
+      ])
+    );
+  });
+
+  it("should return results when searching by date", async () => {
+    const results = await searchAppointments(
+      "10-11-2024",
+      undefined,
+      undefined,
+      undefined,
+      undefined
+    );
+    expect(results.data).toEqual(
+      expect.arrayContaining([
+        {
+          id: 8,
+          email: "john.doe@example.com",
+          phoneNumber: "123-456-7890",
+          requested_date: "10-11-2024",
+          status: "CREATED",
+          address: {
+            full_address: "9007 HIGHLAND RD, STE 9",
+            city: "BATON ROUGE",
+            zip: 70810,
+          },
+        },
+      ])
+    );
+  });
+
+  it("should return results when searching by zipCode", async () => {
+    const results = await searchAppointments(
+      undefined,
+      undefined,
+      "70810",
+      undefined,
+      undefined
+    );
+    expect(results.data).toEqual(
+      expect.arrayContaining([
+        {
+          id: 8,
+          email: "john.doe@example.com",
+          phoneNumber: "123-456-7890",
+          requested_date: "10-11-2024",
+          status: "CREATED",
+          address: {
+            full_address: "9007 HIGHLAND RD, STE 9",
+            city: "BATON ROUGE",
+            zip: 70810,
+          },
+        },
+      ])
+    );
+  });
+
+  it("should throw an error if no parameters are provided", async () => {
+    await expect(searchAppointments()).rejects.toThrow(
+      "At least one search parameter must be provided."
     );
   });
 });

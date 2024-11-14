@@ -1,7 +1,5 @@
 //Interfaces
 import { Appointment } from "../interfaces/appointment";
-import { AppointmentPreview } from "../interfaces/appointmentPreview";
-import { AppointmentSearchRequest } from "../interfaces/appointmentSearchRequest";
 //Other imports
 import { prisma } from "../utils/dbClient";
 import { AppError } from "../utils/AppError";
@@ -18,19 +16,7 @@ const defaultPageSizeAppointments =
 
 export const createAppointment = async (appointment: Appointment) => {
   return await prisma.$transaction(async (tx: any) => {
-    // Step 1: Check the current count of appointments for the given date
-    const appointmentCounter = await tx.daily_Appointments_Counter.findUnique({
-      where: { date: appointment.appointmentDate },
-    });
-
-    if (appointmentCounter && appointmentCounter.counter >= 9) {
-      throw new AppError(
-        "Maximum number of appointments reached for this date. Please select a different date.",
-        400
-      );
-    }
-
-    //Step 2: Check that the address exists in Address_Listing table and get the FK
+    //Step 1: Check that the address exists in Address_Listing table and get the FK
     const { fullAddress, city, zip } = appointment.address;
 
     //Sanitize input since queryRawUnsafe bypasses the usual queryRaw protection against sql injection
@@ -58,6 +44,18 @@ export const createAppointment = async (appointment: Appointment) => {
     }
 
     const fk_address = matchedAddresses[0].id;
+
+    // Step 2: Check the current count of appointments for the given date
+    const appointmentCounter = await tx.daily_Appointments_Counter.findUnique({
+      where: { date: appointment.appointmentDate },
+    });
+
+    if (appointmentCounter && appointmentCounter.counter >= 9) {
+      throw new AppError(
+        "Maximum number of appointments reached for this date. Please select a different date.",
+        400
+      );
+    }
 
     // Step 3: Create the appointment
     //check that appointmentDate is not in the past
@@ -110,7 +108,7 @@ export const searchAppointments = async (
   const conditions: any = {};
   if (date) conditions.requested_date = { equals: date };
   if (status) conditions.status = { equals: status };
-  if (zipCode) conditions.zip = { equals: zipCode };
+  if (zipCode) conditions.address = { zip: Number(zipCode) };
 
   if (Object.keys(conditions).length === 0) {
     throw new Error("At least one search parameter must be provided.");
@@ -122,7 +120,7 @@ export const searchAppointments = async (
   });
 
   //Get the items
-  const items = await prisma.appointments.findMany({
+  const data = await prisma.appointments.findMany({
     skip: (Number(pageNumber) - 1 || 0) * Number(pageSize) || 0,
     take: pageSize || defaultPageSizeAppointments,
     where: conditions,
@@ -142,5 +140,5 @@ export const searchAppointments = async (
     },
   });
 
-  return { totalItems, items };
+  return { totalItems, data };
 };

@@ -7,6 +7,8 @@ import {
 } from "../../src/interfaces/appointment";
 import { Response, NextFunction } from "express";
 import { AppointmentStatus } from "../../src/interfaces/appointmentStatus";
+import request from "supertest";
+import app from "../../server";
 
 jest.mock("../../src/services/appointmentService");
 
@@ -94,5 +96,29 @@ describe("httpCreateAppointment Controller", () => {
     expect(mockNext).toHaveBeenCalledWith(error);
     expect(mockRes.status).not.toHaveBeenCalled();
     expect(mockRes.json).not.toHaveBeenCalled();
+  });
+});
+
+describe("httpSearchAppointments", () => {
+  it("should return 200 and matching appointments", async () => {
+    const response = await request(app)
+      .get("/appointment/search")
+      .query({ status: "created" });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("data");
+    expect(response.body).toHaveProperty("totalItems");
+    expect(response.body).toHaveProperty("pageNumber");
+    expect(response.body).toHaveProperty("pageSize");
+    expect(response.body).toHaveProperty("prev");
+    expect(response.body).toHaveProperty("next");
+    expect(Array.isArray(response.body.data)).toBe(true);
+  });
+
+  it("should return 400 if no query parameters are provided", async () => {
+    const response = await request(app).get("/appointment/search");
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty("message");
   });
 });

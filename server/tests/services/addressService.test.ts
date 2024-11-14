@@ -2,11 +2,8 @@ import {
   searchAddresses,
   getAddressReference,
 } from "../../src/services/addressService";
-import { createAppointment } from "../../src/services/appointmentService";
-import { Appointment } from "../../src/interfaces/appointment";
 import { prisma } from "../../src/utils/dbClient";
-import { formatDate } from "../../src/utils/formatDates";
-import { AppointmentStatus } from "../../src/interfaces/appointmentStatus";
+
 
 describe("searchAddresses integration test", () => {
   afterAll(async () => {

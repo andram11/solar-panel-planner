@@ -35,8 +35,10 @@ app.use(appointmentRouter);
 //Error middleware - After all routes
 app.use(errorMiddleware);
 
-app.listen(PORT, () => {
-  logger.info(`Server is running on port ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    logger.info(`Server is running on port ${PORT}`);
+  });
+}
 
 export default app;

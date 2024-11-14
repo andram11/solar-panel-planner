@@ -2,7 +2,7 @@ export const createPaginationResponse = (
   totalItems: number,
   pageNumber: number,
   pageSize: number,
-  items: any
+  data: any
 ) => {
   return {
     totalItems: totalItems,
@@ -20,6 +20,6 @@ export const createPaginationResponse = (
             pageNumber - 1
           }&pageSize=${pageSize}`
         : null,
-    items: items,
+    data: data,
   };
 };
