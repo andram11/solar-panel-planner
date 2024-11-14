@@ -4,6 +4,7 @@ import { AppointmentStatus } from "../../src/interfaces/appointmentStatus";
 import { formatDate } from "../../src/utils/formatDates";
 import {
   createAppointment,
+  getAppointmentById,
   searchAppointments,
 } from "../../src/services/appointmentService";
 
@@ -189,6 +190,42 @@ describe("searchAppointments integration test", () => {
   it("should throw an error if no parameters are provided", async () => {
     await expect(searchAppointments()).rejects.toThrow(
       "At least one search parameter must be provided."
+    );
+  });
+});
+
+describe("get appointment by id integration test", () => {
+  afterAll(async () => {
+    await prisma.$disconnect();
+  });
+
+  it("should return results when searching by id", async () => {
+    const appointment = await getAppointmentById(56);
+    expect(appointment).toBeTruthy();
+
+    expect(appointment).toMatchObject({
+      id: 56,
+      fk_address: 24,
+      fName: "John",
+      lName: "Doe",
+      email: "john.doe@example.com",
+      phoneNumber: "123-456-7890",
+      requested_date: "15-11-2024",
+      pref_timeslot: "10:00-12:00",
+      actual_timeslot: null,
+      status: "CREATED",
+      //Removing these from tests because values are returned as in the db as timestamp without time zone and
+      //it's too much of a hassle to make the conversion every time for testing, especially since these
+      //2 fields are more of metadata kind of data
+      // createdAt: "2024-11-14T20:19:19.738Z",
+      // updatedAt: "2024-11-14T20:19:19.738Z",
+      comments: "First appointment consultation",
+    });
+  });
+
+  it("should throw an error if inexistent id is provided", async () => {
+    await expect(getAppointmentById(-20)).rejects.toThrow(
+      "Appointment with the specified ID was not found."
     );
   });
 });
